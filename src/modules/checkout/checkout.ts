@@ -1,15 +1,12 @@
 import { Component } from '../component';
 import { Product } from '../product/product';
 import html from './checkout.tpl.html';
-import {formatPrice, getIdProduct} from '../../utils/helpers';
+import { formatPrice } from '../../utils/helpers';
 import { cartService } from '../../services/cart.service';
 import { ProductData } from 'types';
-import OrderAPI from '../../controllers/order-controllers';
 
 class Checkout extends Component {
   products!: ProductData[];
-  totalPrice: number | undefined;
-  data: any
 
   async render() {
     this.products = await cartService.get();
@@ -25,19 +22,18 @@ class Checkout extends Component {
       productComp.attach(this.view.cart);
     });
 
-    this.totalPrice = this.products.reduce((acc, product) => (acc += product.salePriceU), 0);
-
-    this.view.price.innerText = formatPrice(this.totalPrice);
+    const totalPrice = this.products.reduce((acc, product) => (acc += product.salePriceU), 0);
+    this.view.price.innerText = formatPrice(totalPrice);
 
     this.view.btnOrder.onclick = this._makeOrder.bind(this);
   }
 
   private async _makeOrder() {
     await cartService.clear();
-    this.data.totalPrice = this.totalPrice!
-    this.data.productIds = getIdProduct(this.products)
-
-    OrderAPI.makeOrder(this.data);
+    fetch('/api/makeOrder', {
+      method: 'POST',
+      body: JSON.stringify(this.products)
+    });
     window.location.href = '/?isSuccessOrder';
   }
 }

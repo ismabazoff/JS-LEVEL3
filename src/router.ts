@@ -3,13 +3,14 @@ import { notFoundComp } from './modules/notFound/notFound';
 import { homepageComp } from './modules/homepage/homepage';
 import { productDetailComp } from './modules/productDetail/productDetail';
 import { checkoutComp } from './modules/checkout/checkout';
-import RouteAPI from "./controllers/route-controllers";
+import { SearchSuggestionsComp} from "./modules/searchSuggestions/searchSuggestions";
 
 const ROUTES = {
   '/': homepageComp,
   '/catalog': catalogComp,
   '/product': productDetailComp,
-  '/checkout': checkoutComp
+  '/checkout': checkoutComp,
+  '/searchSuggestions': SearchSuggestionsComp
 };
 
 export default class Router {
@@ -28,10 +29,7 @@ export default class Router {
 
     // @ts-ignore
     const component = ROUTES[window.location.pathname] || notFoundComp;
-    const route: any = {}
 
-    route.url = window.location.pathname
-    RouteAPI.navigatePages(route)
     component.attach(this.$appRoot);
     component.render();
   }

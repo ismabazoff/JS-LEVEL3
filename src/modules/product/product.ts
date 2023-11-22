@@ -3,8 +3,6 @@ import { View } from '../../utils/view';
 import { formatPrice } from '../../utils/helpers'
 import html from './product.tpl.html';
 import { ProductData } from 'types';
-import ProductAPI from "../../controllers/product-controllers";
-
 
 type ProductComponentParams = { [key: string]: any };
 
@@ -32,10 +30,5 @@ export class Product {
     this.view.price.innerText = formatPrice(salePriceU);
 
     if (this.params.isHorizontal) this.view.root.classList.add('is__horizontal')
-    this.view.root.onclick = this.sendData.bind(this);
   }
-  sendData() {
-    ProductAPI.getProductSecretKey(this.product)
-  }
-
 }

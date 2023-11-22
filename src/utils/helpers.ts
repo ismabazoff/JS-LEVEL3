@@ -1,5 +1,3 @@
-import {ProductData} from "../../types";
-
 export const genUUID = () => {
     let d = new Date().getTime();
     if (window.performance && typeof window.performance.now === 'function') {
@@ -10,14 +8,6 @@ export const genUUID = () => {
         d = Math.floor(d / 16);
         return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
     });
-}
-export const genOrderID = (length = 8) => {
-        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-        let orderNumber = '';
-        for(let i = 0; i < length; i++) {
-            orderNumber += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-        return orderNumber;
 }
 
 export const addElement = (parent: HTMLElement, tag: string, options?: object) => {
@@ -38,19 +28,16 @@ export const formatPrice = (price: number) => {
   );
 };
 
-export const getIdProduct = (products: ProductData[]) => {
-   return  products.map((product) => {
-        return product.id
-    })
-}
-export const getProductSecretKey = (id: number) => Math.pow(id, 2).toString(16);
-
-export function isEmpty(obj: any) {
-    for (const prop in obj) {
-        if (Object.prototype.hasOwnProperty.call(obj, prop)) {
-            return false;
-        }
+export const getRandom = (arr: string[] | any[], n: number) => {
+    let result = new Array(3),
+        len = arr.length,
+        taken = new Array(len);
+    if (n > len)
+        throw new RangeError("getRandom: more elements taken than available");
+    while (n--) {
+        const x = Math.floor(Math.random() * len);
+        result[n] = arr[x in taken ? taken[x] : x];
+        taken[x] = --len;
     }
-
-    return true
+    return result;
 }
